@@ -8,7 +8,7 @@ const totalLikes = (blogs) => {
   return blogs.reduce((x, y) => x + y.likes, 0)
 }
 
-const mostLikes = (blogs) => {
+const favouriteBlog = (blogs) => {
   let i = 0
   const mvp = [0, 0]
   blogs.forEach(x => {
@@ -35,9 +35,23 @@ const mostBlogs = blogs => {
   return res
 }
 
+const mostLikes = blogs => {
+  const h = _.groupBy(blogs, 'author')
+  const v = _.values(h).map(x => totalLikes(x))
+  const m = _.zipObject(_.keys(h), v)
+  const a = _.keys(m).reduce((a, b) => m[a] > m[b] ? a : b)
+
+  const res = {
+    author: a,
+    likes: m[a]
+  }
+  return res
+}
+
 module.exports = {
   dummy,
   totalLikes,
   mostLikes,
-  mostBlogs
+  mostBlogs,
+  favouriteBlog
 }
