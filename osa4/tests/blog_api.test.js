@@ -41,6 +41,18 @@ test('posting a blog is ok', async() => {
   expect(newAmountOfBlogs.body[numberOfBlogs-1]).toHaveProperty('title', 'author', 'url', 'likes')
 })
 
+test('like has default value of 0', async() => {
+  const blog = new Blog({
+    title: "my blogs",
+    author: "Max",
+    url: "https://reactpatterns.com/"
+  })
+  await api.post('/api/blogs')
+    .send(blog)
+
+  expect(blog.likes).toBe(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
