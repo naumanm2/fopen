@@ -15,19 +15,30 @@ beforeEach(async () => {
   await api.post('/api/blogs').send(blog)
 })
 
-test('valid amount of blogs', async() => {
-  const res = await api.get('/api/blogs')
-  expect(res.body).toHaveLength(2)
 
-})
 
 test('all blogs have valid id field', async() => {
   const res = await api.get('/api/blogs')
-  try {
     expect(res.body[0].id.toBeDefined)
-  } catch (e) {
 
+})
+
+test('posting a blog is ok', async() => {
+  const allBlogs = await api.get('/api/blogs')
+
+  const newPost = {
+    title: "React patterns",
+    author: "Michael ban",
+    url: "https://reactpatterns.com/",
+    likes: 3
   }
+
+  await api.post('/api/blogs').send(newPost)
+  const newAmountOfBlogs = await api.get('/api/blogs')
+  const numberOfBlogs = newAmountOfBlogs.body.length
+
+  expect(newAmountOfBlogs.body).toHaveLength(allBlogs.body.length + 1)
+  expect(newAmountOfBlogs.body[numberOfBlogs-1]).toHaveProperty('title', 'author', 'url', 'likes')
 })
 
 afterAll(() => {
