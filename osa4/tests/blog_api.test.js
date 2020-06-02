@@ -53,6 +53,15 @@ test('like has default value of 0', async() => {
   expect(blog.likes).toBe(0)
 })
 
+test('blog has valid fields for url and title', async() => {
+  const blog = new Blog({
+    author: "Max"
+  })
+  await api.post('/api/blogs')
+    .send(blog)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
