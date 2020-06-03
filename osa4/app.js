@@ -7,6 +7,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const blogRouter = require('./controllers/blogs')
 const middleware = require('./utils/middleware')
+const usersRouter = require('./controllers/users')
 
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true})
@@ -14,12 +15,12 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology
   .catch((error) => logger.error('error connecting to MongoDB', error.message))
 
 
-
+mongoose.set('useCreateIndex', true);
 app.use(express.json())
 app.use(cors())
 app.use('/api/blogs', blogRouter)
-
-
+app.use('/api/users', usersRouter)
+app.use(middleware.requestLogger)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
