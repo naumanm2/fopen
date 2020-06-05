@@ -16,7 +16,7 @@ describe('when there is initially one user at db', () => {
     await userObject.save()
     userObject = new User(helper.initialUsers[1])
     await userObject.save()
-    
+
     const passwordHash = await bcrypt.hash('sekret', 10)
     const user = new User({ username: 'root', passwordHash })
 
@@ -44,7 +44,7 @@ describe('when there is initially one user at db', () => {
     const usernames = usersAtEnd.map(u => u.username)
     expect(usernames).toContain(newUser.username)
   })
-})
+
 
   test('creation fails with proper statuscode and message if username already taken', async () => {
     const usersAtStart = await helper.usersInDb()
@@ -66,7 +66,7 @@ describe('when there is initially one user at db', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
-
+})
 
 afterAll(() => {
   mongoose.connection.close()
