@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/Loginform'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Logout from './components/Logout'
 import Createnew from './components/Createnew'
+import './index.css'
+import Notif from './components/Notif'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -16,6 +19,9 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
   const [author, setAuthor] = useState("")
+  const [success, setSuccess] = useState(true)
+
+  const blogRef = useRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -26,10 +32,16 @@ const App = () => {
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
       )
+      setSuccess(true)
       setUser(user)
+      setErrorMessage(`${user.username} logged in`)
       setUsername('')
       setPassword('')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     } catch (exception) {
+      setSuccess(false)
       setErrorMessage('wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
@@ -51,11 +63,18 @@ const App = () => {
       url: url
     })
     try {
+      blogRef.current.toggleVisibility()
       await blogService.createBlog(blog)
       setAuthor("")
       setUrl("")
       setTitle("")
+      setSuccess(true)
+      setErrorMessage(`a new blog ${blog.title} by ${blog.author} added`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     } catch (exception) {
+      setSuccess(false)
       setErrorMessage('wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
@@ -77,25 +96,20 @@ const App = () => {
     }
   }, [])
 
-  if (user === null) {
-    return (
-        <LoginForm
-          username={username}
-          password={password}
-          usernameChange={({ target }) => setUsername(target.value)}
-          passwordChange={({ target }) => setPassword(target.value)}
-          handleLogin={handleLogin}
-        />
-    )
-  }
+  const loginForm = () => (
+    <Togglable buttonLabel='log in'>
+      <LoginForm
+        username={username}
+        password={password}
+        usernameChange={({ target }) => setUsername(target.value)}
+        passwordChange={({ target }) => setPassword(target.value)}
+        handleLogin={handleLogin}
+      />
+    </Togglable>
+  )
 
-  return (
-    <div>
-      <h2>blogs</h2>
-      <Logout
-        user={user}
-        handleLogout={handleLogout}
-        />
+  const blogForm = () => (
+    <Togglable buttonLabel='new blog' ref={blogRef}>
       <Createnew
         user={user}
         authorChange={({target}) => setAuthor(target.value)}
@@ -103,9 +117,38 @@ const App = () => {
         urlChange={({target}) => setUrl(target.value)}
         createNew={postBlog}
       />
+    </Togglable>
+  )
+
+
+  if (user === null) {
+    return (
+      <div>
+        <h2>Log in to application</h2>
+        <Notif
+          msg={errorMessage}
+          success={success}
+        />
+      {loginForm()}
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <h2>blogs</h2>
+      <Notif
+        msg={errorMessage}
+        success={success}
+      />
+      <Logout
+        user={user}
+        handleLogout={handleLogout}
+      />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
+    {blogForm()}
     </div>
   )
 }
