@@ -28,7 +28,6 @@ const setlikes = (id, blog) => {
     headers: {Authorization: token}
   }
 
-  console.log(blog)
   const url = `${baseUrl}/${id}`
 
   const request = axios.put(url, blog, config)
