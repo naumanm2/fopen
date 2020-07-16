@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({
+   userid,
+   blog,
+   setlikes,
+   deleteblog
+ }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -23,6 +28,10 @@ const Blog = ({ blog }) => {
     }
   }
 
+  const showWhenValidUser = (bloguserid) => {
+    return {display: (bloguserid === userid) ? '' : 'none'}
+  }
+
   return (
   <div style = {blogStyle}>
     <div>
@@ -30,8 +39,11 @@ const Blog = ({ blog }) => {
     </div>
     <div style = {showWhenVisible}>
       <p>{blog.url}</p>
-      <p>likes {blog.likes}<button>like</button></p>
+      <p>likes {blog.likes}<button onClick={() => {setlikes(blog)}}>like</button></p>
       <p>{blog.user.username}</p>
+      <div style = {showWhenValidUser(blog.user.username)}>
+        <button onClick={() => {deleteblog(blog)}}>remove</button>
+      </div>
     </div>
 
   </div>

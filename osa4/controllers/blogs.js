@@ -44,7 +44,7 @@ blogRouter.post('/', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
-
+  console.log(request.body)
   const body = request.body
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken || !decodedToken.id) {
@@ -71,10 +71,10 @@ blogRouter.delete('/:id', async (request, response) => {
 
 blogRouter.put('/:id', async (request, response) => {
   const blog = new Blog(request.body)
-  const result = await Blog.findByIdAndUpdate(request.params.id, blog, {
+  const result = await Blog.findByIdAndUpdate(request.params.id, request.body, {
     new: true
   })
   response.json(result.toJSON())
 })
 
-module.exports =blogRouter
+module.exports = blogRouter

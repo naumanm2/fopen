@@ -23,6 +23,10 @@ const App = () => {
 
   const blogRef = useRef()
 
+  const sortblogs = (a, b) => {
+    return b.likes - a.likes
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -82,9 +86,52 @@ const App = () => {
     }
   }
 
+  const setlikes = async (blog) => {
+    const newblog = ({
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    })
+
+    try {
+      await blogService.setlikes(blog.id, newblog)
+      setSuccess(true)
+      await blogService.getAll().then(blogs =>
+        setBlogs( blogs.sort(sortblogs) )
+      )
+    } catch (exception) {
+      setSuccess(false)
+      setErrorMessage('wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const deleteblog = async (blog) => {
+    blogService.setToken(user.token)
+    try {
+      if (window.confirm(`remove blog ${blog.title} by ${blog.author}?`)) {
+        await blogService.deleteblog(blog.id)
+        setSuccess(true)
+        await blogService.getAll().then(blogs =>
+          setBlogs( blogs.sort(sortblogs) )
+        )
+      }
+    } catch (exception) {
+      setSuccess(false)
+      setErrorMessage('wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort(sortblogs) )
     )
   }, [])
 
@@ -146,7 +193,12 @@ const App = () => {
         handleLogout={handleLogout}
       />
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id}
+          userid={user.username}
+          blog={blog}
+          setlikes={setlikes}
+          deleteblog={deleteblog}
+        />
       )}
     {blogForm()}
     </div>

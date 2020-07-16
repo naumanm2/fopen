@@ -12,7 +12,7 @@ const setToken = t => {
   token = `bearer ${t}`
 }
 
-const createBlog =  async (blog) => {
+const createBlog = (blog) => {
 
 
   const config = {
@@ -23,4 +23,26 @@ const createBlog =  async (blog) => {
 
 }
 
-export default { getAll, setToken, createBlog }
+const setlikes = (id, blog) => {
+  const config = {
+    headers: {Authorization: token}
+  }
+
+  console.log(blog)
+  const url = `${baseUrl}/${id}`
+
+  const request = axios.put(url, blog, config)
+  return request.then(response => response.data)
+}
+
+const deleteblog = (id) => {
+  const config = {
+    headers: {Authorization: token}
+  }
+  const url = `${baseUrl}/${id}`
+
+  const request = axios.delete(url, config)
+  return request.then(response => response.data)
+}
+
+export default { getAll, setToken, createBlog, setlikes, deleteblog }
