@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Createnew = ({
-  user,
   authorChange,
   urlChange,
   titleChange,
@@ -13,18 +12,17 @@ const Createnew = ({
       <form onSubmit={createNew}>
         <div>
           title:
-            <input
-              type="text"
-              onChange={titleChange}
-            />
-
+          <input
+            type="text"
+            onChange={titleChange}
+          />
         </div>
         <div>
-            author:
-            <input
-              type="text"
-              onChange={authorChange}
-            />
+        author:
+          <input
+            type="text"
+            onChange={authorChange}
+          />
         </div>
         <div>
           url:

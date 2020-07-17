@@ -16,7 +16,7 @@ const createBlog = (blog) => {
 
 
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
   const request = axios.post(baseUrl, blog, config)
   return request.then(response => response.data)
@@ -25,7 +25,7 @@ const createBlog = (blog) => {
 
 const setlikes = (id, blog) => {
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
 
   const url = `${baseUrl}/${id}`
@@ -36,7 +36,7 @@ const setlikes = (id, blog) => {
 
 const deleteblog = (id) => {
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
   const url = `${baseUrl}/${id}`
 

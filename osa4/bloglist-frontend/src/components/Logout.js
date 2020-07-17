@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Logout = ({user, handleLogout}) => {
+const Logout = ({ user, handleLogout }) => {
   return (
     <div>
       <form onSubmit = {handleLogout}>
