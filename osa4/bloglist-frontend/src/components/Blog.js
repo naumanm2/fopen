@@ -34,10 +34,10 @@ const Blog = ({
 
   return (
     <div style = {blogStyle}>
-      <div>
+      <div className="showOnDefault">
         {blog.title} {blog.author} <button onClick={setVisibility}>{text}</button>
       </div>
-      <div style = {showWhenVisible}>
+      <div style = {showWhenVisible} className="doNotShowOnDefault">
         <p>{blog.url}</p>
         <p>likes {blog.likes}<button onClick={() => {setlikes(blog)}}>like</button></p>
         <p>{blog.user.username}</p>
