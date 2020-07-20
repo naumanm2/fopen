@@ -16,9 +16,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
-  const [author, setAuthor] = useState('')
   const [success, setSuccess] = useState(true)
 
   const blogRef = useRef()
@@ -57,21 +54,13 @@ const App = () => {
     window.localStorage.clear()
   }
 
-  const postBlog = async (event) => {
-    event.preventDefault()
+  const postBlog = (blog) => {
     blogService.setToken(user.token)
-    const blog = ({
-      title: title,
-      author: author,
-      user: user,
-      url: url
-    })
     try {
       blogRef.current.toggleVisibility()
-      await blogService.createBlog(blog)
-      setAuthor('')
-      setUrl('')
-      setTitle('')
+      blogService.createBlog(blog).then(blog => {
+        setBlogs(blogs.concat(blog).sort(sortblogs))
+      })
       setSuccess(true)
       setErrorMessage(`a new blog ${blog.title} by ${blog.author} added`)
       setTimeout(() => {
@@ -158,9 +147,7 @@ const App = () => {
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogRef}>
       <Createnew
-        authorChange={({ target }) => setAuthor(target.value)}
-        titleChange={({ target }) => setTitle(target.value)}
-        urlChange={({ target }) => setUrl(target.value)}
+        user={user}
         createNew={postBlog}
       />
     </Togglable>
