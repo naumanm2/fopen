@@ -41,7 +41,7 @@ const Blog = ({
         <p>{blog.url}</p>
         <p>likes {blog.likes}<button onClick={() => {setlikes(blog)}}>like</button></p>
         <p>{blog.user.username}</p>
-        <div style = {showWhenValidUser(blog.user.username)}>
+        <div style = {showWhenValidUser(blog.user.username)} class="removebutton">
           <button onClick={() => { deleteblog(blog)} }>remove</button>
         </div>
       </div>

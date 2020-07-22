@@ -6,7 +6,14 @@ describe('Blog app', function() {
       username: 'naummax',
       password: 'mypassword'
     }
+    const wronguser = {
+        name: 'lax',
+        username: 'laummax',
+        password: 'mypassword'
+
+    }
     cy.request('POST', 'http://localhost:3001/api/users/', user)
+    cy.request('POST', 'http://localhost:3001/api/users/', wronguser)
     cy.visit('http://localhost:3000')
   })
 
@@ -67,6 +74,29 @@ describe('Blog app', function() {
       cy.contains('likes 0')
       cy.contains('like').click()
       cy.contains('likes 1')
+
+    })
+
+    it.only('A blog can only be removed by a valid user', function() {
+      cy.contains('logout').click()
+      cy.contains('log in').click()
+      cy.get('#username').type('laummax')
+      cy.get('#password').type('mypassword')
+      cy.contains('login').click()
+      cy.contains('view').click()
+      cy.get('.doNotShowOnDefault')
+      cy.get('.removebutton')
+        .should('have.attr', 'style', 'display: none;')
+
+      cy.contains('logout').click()
+      cy.contains('log in').click()
+      cy.get('#username').type('naummax')
+      cy.get('#password').type('mypassword')
+      cy.contains('login').click()
+      cy.contains('view').click()
+      cy.contains('remove').click()
+      cy.get('html').should('not.contain', 'my testing the')
+
 
     })
   })
