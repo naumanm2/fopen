@@ -7,14 +7,35 @@ describe('Blog app', function() {
       password: 'mypassword'
     }
     const wronguser = {
-        name: 'lax',
-        username: 'laummax',
-        password: 'mypassword'
-
+      name: 'lax',
+      username: 'laummax',
+      password: 'mypassword'
     }
-    cy.request('POST', 'http://localhost:3001/api/users/', user)
-    cy.request('POST', 'http://localhost:3001/api/users/', wronguser)
+    const blog1 = {
+      author: 'uno',
+      user: user,
+      title: 'firstblog',
+      url: 'f.com',
+      likes: 500
+    }
+    const blog2 = {
+      author: 'dos',
+      user: user,
+      title: 'secondblog',
+      url: 'f.com',
+      likes: 200
+    }
+    const blog3 = {
+      author: 'dos',
+      user: user,
+      title: 'thirdblog',
+      url: 'f.com',
+      likes: 9000
+    }
+    cy.request('POST', 'http://localhost:3001/api/users', user)
+    cy.request('POST', 'http://localhost:3001/api/users', wronguser)
     cy.visit('http://localhost:3000')
+
   })
 
   it('Login form is shown', function() {
@@ -43,7 +64,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.contains('log in').click()
       cy.get('#username').type('naummax')
@@ -77,7 +98,7 @@ describe('Blog app', function() {
 
     })
 
-    it.only('A blog can only be removed by a valid user', function() {
+    it('A blog can only be removed by a valid user', function() {
       cy.contains('logout').click()
       cy.contains('log in').click()
       cy.get('#username').type('laummax')
@@ -101,4 +122,38 @@ describe('Blog app', function() {
     })
   })
 
+  it('Blogs print in order of liking', function() {
+    cy.login({username: 'naummax', password: 'mypassword'})
+    const user = {
+      name: 'max',
+      username: 'naummax',
+      password: 'mypassword'
+    }
+    cy.postBlog({
+      author: 'uno',
+      user: user,
+      title: 'firstblog',
+      url: 'f.com',
+      likes: 500
+    })
+    cy.postBlog({
+      author: 'dos',
+      user: user,
+      title: 'secondblog',
+      url: 'f.com',
+      likes: 200
+    })
+    cy.postBlog({
+      author: 'dos',
+      user: user,
+      title: 'thirdblog',
+      url: 'f.com',
+      likes: 9000
+    })
+    cy.request('GET', 'http://localhost:3001/api/blogs')
+      .then(blogs => {
+        const sortedBlogs = blogs.body.sort( (a, b) => b.likes - a.likes)
+        cy.wrap(sortedBlogs).should("equal", blogs.body)
+      })
+  })
 })
