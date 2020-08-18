@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { newAnecdote } from '../reducers/anecdoteReducer'
 import { notification } from '../reducers/notificationReducer'
-import { toggleVisibility } from '../reducers/visibilityReducer'
 import { filter } from '../reducers/filterReducer'
 
 const AnecdoteForm = () => {
@@ -16,12 +15,8 @@ const AnecdoteForm = () => {
     const content = event.target.createanecdote.value
     event.target.createanecdote.value = ''
     dispatch(newAnecdote(content))
-    dispatch(notification('CREATE', content))
-    dispatch(toggleVisibility('SHOW'))
+    dispatch(notification(`added anecdote '${content}'`, 5))
     dispatch(filter(currentFilter))
-    setTimeout(() => {
-      dispatch(toggleVisibility(''))
-    }, 5000)
 
   }
 

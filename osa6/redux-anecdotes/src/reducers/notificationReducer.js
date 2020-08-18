@@ -1,24 +1,36 @@
+export const notification = (act, time) => {
+  return async dispatch => {
+    await setTimeout(() => {
+      dispatch({
+        type: 'NOTIFICATION',
+        data: {
+          act: act,
+          display: { display: 'none' }
+        }
+      })
+    }, time * 1000)
 
+    dispatch({
+      type: 'NOTIFICATION',
+      data: {
+        act: act,
+        display: { display: '' }
+      }
+    })
 
-export const notification = (act, anecdote) => {
-  return {
-    type: act,
-    data: {
-      act: act,
-      content: anecdote
-    }
   }
-
 }
 
 
+const initialState = {
+  display: { display: 'none' }
+}
 
-const notificationReducer = (state = '', action) => {
+
+const notificationReducer = (state = initialState, action) => {
   switch(action.type) {
-    case 'VOTE':
-      return `You voted for ${action.data.content}`
-    case 'CREATE':
-      return `added new anecdote ${action.data.content}`
+    case 'NOTIFICATION':
+      return action.data
     default:
       return state
   }
