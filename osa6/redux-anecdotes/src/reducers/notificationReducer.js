@@ -1,20 +1,26 @@
-export const notification = (act, time) => {
+export const notification = (act, time, timer) => {
+
   return async dispatch => {
-    await setTimeout(() => {
+
+    await clearTimeout(timer)
+
+    timer = await setTimeout(() => {
       dispatch({
         type: 'NOTIFICATION',
         data: {
           act: act,
-          display: { display: 'none' }
+          display: { display: 'none' },
+          timer: timer
         }
       })
     }, time * 1000)
-
+    
     dispatch({
       type: 'NOTIFICATION',
       data: {
         act: act,
-        display: { display: '' }
+        display: { display: '' },
+        timer: timer
       }
     })
 

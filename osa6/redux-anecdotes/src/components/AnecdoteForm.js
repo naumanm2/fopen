@@ -1,22 +1,19 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { newAnecdote } from '../reducers/anecdoteReducer'
 import { notification } from '../reducers/notificationReducer'
 import { filter } from '../reducers/filterReducer'
 
-const AnecdoteForm = () => {
-
-  const dispatch = useDispatch()
-  const currentFilter = useSelector(state => state.filter)
+const AnecdoteForm = (props) => {
 
 
   const addAnecdote = (event) => {
     event.preventDefault()
     const content = event.target.createanecdote.value
     event.target.createanecdote.value = ''
-    dispatch(newAnecdote(content))
-    dispatch(notification(`added anecdote '${content}'`, 5))
-    dispatch(filter(currentFilter))
+    props.newAnecdote(content)
+    props.notification(`added anecdote '${content}'`, 5)
+    props.filter(props.currentFilter)
 
   }
 
@@ -33,4 +30,20 @@ const AnecdoteForm = () => {
   )
 }
 
-export default AnecdoteForm
+const mapStateToProps = (state) => {
+  return {
+    currentFilter: state.filter
+  }
+
+}
+
+const mapDispatchToProps = {
+  newAnecdote,
+  notification,
+  filter,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AnecdoteForm)
