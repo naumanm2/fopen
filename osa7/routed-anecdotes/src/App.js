@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
-  BrowserRouter as Router,
-  Switch, Route, Link, useRouteMatch
+  Switch, Route, Link, useRouteMatch, useHistory
 } from "react-router-dom"
 
 const Menu = () => {
@@ -15,6 +14,17 @@ const Menu = () => {
         <Link style={padding} to="/about">about</Link>
       </div>
 
+  )
+}
+
+const Notification = ({ notification, visibility }) => {
+
+  const show = { display: visibility ? '' : 'none'}
+
+  return (
+    <div style={show}>
+      <p>{notification}</p>
+    </div>
   )
 }
 
@@ -56,6 +66,7 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
+  const history = useHistory()
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
@@ -69,6 +80,12 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.setNotification(`a new anecdote ${content} added!`)
+    props.setVisibility(true)
+    setTimeout(() => {
+      props.setVisibility(false)
+    }, 10000)
+    history.push('/anecdotes')
   }
 
   return (
@@ -113,6 +130,7 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+  const [visibility, setVisibility] = useState(true)
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
@@ -137,11 +155,13 @@ const App = () => {
   const anecdote = match
     ? match.params.id : null
 
-    console.log(anecdote)
   return (
       <div>
         <h1>Software anecdotes</h1>
         <Menu />
+        <Notification
+          notification={notification}
+          visibility={visibility} />
 
           <Switch>
             <Route path="/anecdotes/:id">
@@ -149,7 +169,10 @@ const App = () => {
             </Route>
 
             <Route path="/createnew">
-              <CreateNew addNew={addNew} />
+              <CreateNew
+                addNew={addNew}
+                setNotification={setNotification}
+                setVisibility={setVisibility} />
             </Route>
 
             <Route path="/about">
