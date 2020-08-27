@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
   Switch, Route, Link, useRouteMatch, useHistory
 } from "react-router-dom"
+import { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -67,25 +68,36 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const history = useHistory()
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info')
+
+  const {reset: contentreset, ...validcontent} = content
+  const {reset: authorreset, ...validauthor} = author
+  const {reset: inforeset, ...validinfo} = info
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(content)
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
-    props.setNotification(`a new anecdote ${content} added!`)
+    props.setNotification(`a new anecdote ${content.value} added!`)
     props.setVisibility(true)
     setTimeout(() => {
       props.setVisibility(false)
     }, 10000)
     history.push('/anecdotes')
+  }
+
+  const clearFields = () => {
+    contentreset()
+    authorreset()
+    inforeset()
   }
 
   return (
@@ -94,18 +106,21 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...validcontent} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...validauthor} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...validinfo} />
         </div>
         <button>create</button>
       </form>
+      <div>
+        <button onClick={() => {clearFields()}}>reset</button>
+    </div>
     </div>
   )
 
