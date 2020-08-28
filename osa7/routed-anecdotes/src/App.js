@@ -79,7 +79,6 @@ const CreateNew = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(content)
     props.addNew({
       content: content.value,
       author: author.value,
