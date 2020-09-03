@@ -9,16 +9,19 @@ import './index.css'
 import Notif from './components/Notif'
 import Togglable from './components/Togglable'
 
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [success, setSuccess] = useState(true)
 
   const blogRef = useRef()
+
+  const dispatch = useDispatch()
 
   const sortblogs = (a, b) => {
     return b.likes - a.likes
@@ -33,22 +36,14 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
-      setSuccess(true)
       setUser(user)
-      setErrorMessage(`${user.username} logged in`)
+      dispatch(setNotification(`${user.username} logged in`, true, 5))
       setUsername('')
       setPassword('')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
     } catch (exception) {
-      setSuccess(false)
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
+      dispatch(setNotification('wrong credentials', false, 5))
   }
+}
 
   const handleLogout = () => {
     window.localStorage.clear()
@@ -61,17 +56,9 @@ const App = () => {
       blogService.createBlog(blog).then(blog => {
         setBlogs(blogs.concat(blog).sort(sortblogs))
       })
-      setSuccess(true)
-      setErrorMessage(`a new blog ${blog.title} by ${blog.author} added`)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification(`a new blog ${blog.title} by ${blog.author} added`, true, 5))
     } catch (exception) {
-      setSuccess(false)
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('wrong credentials', false, 5))
     }
   }
 
@@ -86,16 +73,11 @@ const App = () => {
 
     try {
       await blogService.setlikes(blog.id, newblog)
-      setSuccess(true)
       await blogService.getAll().then(blogs =>
         setBlogs( blogs.sort(sortblogs) )
       )
     } catch (exception) {
-      setSuccess(false)
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('wrong credentials', false, 5))
     }
   }
 
@@ -104,17 +86,12 @@ const App = () => {
     try {
       if (window.confirm(`remove blog ${blog.title} by ${blog.author}?`)) {
         await blogService.deleteblog(blog.id)
-        setSuccess(true)
         await blogService.getAll().then(blogs =>
           setBlogs( blogs.sort(sortblogs) )
         )
       }
     } catch (exception) {
-      setSuccess(false)
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('wrong credentials', false, 5))
     }
   }
 
@@ -158,10 +135,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notif
-          msg={errorMessage}
-          success={success}
-        />
+        <Notif />
         {loginForm()}
       </div>
     )
@@ -170,10 +144,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notif
-        msg={errorMessage}
-        success={success}
-      />
+      <Notif />
       <Logout
         user={user}
         handleLogout={handleLogout}
