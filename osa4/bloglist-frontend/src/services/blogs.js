@@ -13,8 +13,6 @@ const setToken = t => {
 }
 
 const createBlog = (blog) => {
-
-
   const config = {
     headers: { Authorization: token }
   }
@@ -23,7 +21,7 @@ const createBlog = (blog) => {
 
 }
 
-const setlikes = (id, blog) => {
+const update = (blog, id) => {
   const config = {
     headers: { Authorization: token }
   }
@@ -44,4 +42,4 @@ const deleteblog = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, setToken, createBlog, setlikes, deleteblog }
+export default { getAll, setToken, createBlog, update, deleteblog }

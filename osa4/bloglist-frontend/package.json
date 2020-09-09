@@ -22,7 +22,7 @@
     "eslint": "eslint .",
     "cypress:open": "cypress open"
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:3000",
   "eslintConfig": {
     "extends": "react-app"
   },

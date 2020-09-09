@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { voteBlog, deleteBlog } from '../reducers/blogReducer'
+import { toggleVisibility } from '../reducers/visibilityReducer'
 
 const Blog = ({
-  userid,
   blog,
-  setlikes,
-  deleteblog
-}) => {
+  user,
+  deleteBlog,
+  voteBlog,
+  visibleBlogs,
+  toggleVisibility
+  }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -15,38 +20,81 @@ const Blog = ({
     marginBottom: 5
   }
 
-  const [visible, setVisible] = useState(false)
-  const [text, setText] = useState('view')
-  const showWhenVisible = { display: visible ? '' : 'none' }
-
-  const setVisibility = () => {
-    setVisible(!visible)
-    if (text === 'view') {
-      setText('hide')
-    } else {
-      setText('view')
-    }
+  const check = blog => {
+    return visibleBlogs.indexOf(blog.id) > -1
   }
 
-  const showWhenValidUser = (bloguserid) => {
-    return { display: (bloguserid === userid) ? '' : 'none' }
+  const setVisibility = (blog) => {
+    if (check(blog)) {
+      toggleVisibility(false, blog.id)
+    } else {
+      toggleVisibility(true, blog.id)
+    }
+
+  }
+
+  const text = (blog) => {
+    if (check(blog)) {
+      return 'hide'
+    }
+      else {
+        return 'view'
+      }
+  }
+
+
+  const showWhenValidUser = (blog) => {
+    return { display: (blog.user.username === user.username) ? '' : 'none' }
+  }
+
+  const showWhenValid = (blog) => {
+    if (check(blog)) {
+      return { display: '' }
+    } else {
+      return { display: 'none' }
+    }
+
   }
 
   return (
-    <div style = {blogStyle}>
-      <div className="showOnDefault">
-        {blog.title} {blog.author} <button onClick={setVisibility}>{text}</button>
-      </div>
-      <div style = {showWhenVisible} className="doNotShowOnDefault">
-        <p>{blog.url}</p>
-        <p>likes {blog.likes}<button onClick={() => {setlikes(blog)}}>like</button></p>
-        <p>{blog.user.username}</p>
-        <div style = {showWhenValidUser(blog.user.username)} className="removebutton">
-          <button onClick={() => { deleteblog(blog)} }>remove</button>
+    <div>
+      {blog.map(blog =>
+        <div key={blog.id}>
+          <div style = {blogStyle}>
+          <div className="showOnDefault">
+            {blog.title} {blog.author} <button onClick={() => setVisibility(blog)}>{text(blog)}</button>
+          </div>
+          <div style = {showWhenValid(blog)} className="doNotShowOnDefault">
+            <p>{blog.url}</p>
+            <p>likes {blog.likes}<button onClick={() => {voteBlog(blog, user.token)}}>like</button></p>
+            <p>{blog.user.username}</p>
+            <div style = {showWhenValidUser(blog)} className="removebutton">
+              <button onClick={() => { deleteBlog(blog, user.token)} }>remove</button>
+            </div>
+          </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   )
 }
 
-export default Blog
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    blog: state.blogs,
+    visibleBlogs: state.visibility
+  }
+}
+
+const mapDispatchToProps = {
+  voteBlog,
+  deleteBlog,
+  toggleVisibility
+}
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Blog)
