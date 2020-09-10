@@ -6,6 +6,8 @@ import notificationReducer from './reducers/notificationReducer'
 import blogReducer from './reducers/blogReducer'
 import loginReducer from './reducers/loginReducer'
 import visibilityReducer from './reducers/visibilityReducer'
+import usersReducer from './reducers/usersReducer'
+import userReducer from './reducers/userReducer'
 
 
 
@@ -13,7 +15,9 @@ const reducer = combineReducers({
   notification: notificationReducer,
   blogs: blogReducer,
   user: loginReducer,
-  visibility: visibilityReducer
+  showuser: userReducer,
+  visibility: visibilityReducer,
+  users: usersReducer
 })
 
 

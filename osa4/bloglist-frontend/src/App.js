@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import Users from './components/Users'
+import User from './components/User'
+
 import LoginForm from './components/Loginform'
 import Logout from './components/Logout'
 import Createnew from './components/Createnew'
@@ -7,11 +10,19 @@ import './index.css'
 import Notif from './components/Notif'
 import Togglable from './components/Togglable'
 
+import Container from '@material-ui/core/Container'
+
 import { connect } from 'react-redux'
+
+import {
+  Switch, Route, Link, useRouteMatch, useHistory
+} from "react-router-dom"
 
 import { setNotification } from './reducers/notificationReducer'
 import { addBlog, initialBlogs } from './reducers/blogReducer'
 import { login, initialLogin } from './reducers/loginReducer'
+import { getUsers } from './reducers/usersReducer'
+import { setUserToShow } from './reducers/userReducer'
 
 
 const App = (props) => {
@@ -52,6 +63,12 @@ const App = (props) => {
     props.initialLogin()
   }, [])
 
+  useEffect(() => {
+    props.getUsers()
+  }, [])
+
+
+
 
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogRef}>
@@ -74,31 +91,55 @@ const App = (props) => {
     </Togglable>
   )
 
+  const match = useRouteMatch("/users/:id")
+  const user = () => {
+    const user = match ? match.params.id : null
+    if (user) {
+      return props.users.find(u => u.id === user)
+    }
+  }
+
+
+
   if (props.user === null) {
     return (
-      <div>
-        <h2>Log in to application</h2>
-        <Notif />
-        {loginForm()}
-      </div>
+      <Container>
+        <div>
+          <h2>Log in to application</h2>
+          <Notif />
+          {loginForm()}
+        </div>
+      </Container>
     )
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notif />
-      <Logout   />
-      <Blog />
-
-      {blogForm()}
-    </div>
+    <Container>
+      <div>
+        <h2>blogs</h2>
+        <Notif />
+        <Logout   />
+        <Switch>
+          <Route path="/users/:id">
+            <User user={user()}/>
+          </Route>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/">
+            <Blog />
+            {blogForm()}
+          </Route>
+        </Switch>
+      </div>
+    </Container>
   )
 }
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    users: state.users
   }
 
 }
@@ -107,7 +148,9 @@ const mapDispatchToProps = {
   initialBlogs,
   login,
   setNotification,
-  addBlog
+  addBlog,
+  getUsers,
+  setUserToShow
 }
 
 export default connect(
