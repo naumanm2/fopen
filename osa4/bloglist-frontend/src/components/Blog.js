@@ -10,7 +10,7 @@ const Blog = ({
   voteBlog,
   visibleBlogs,
   toggleVisibility
-  }) => {
+}) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -20,69 +20,34 @@ const Blog = ({
     marginBottom: 5
   }
 
-  const check = blog => {
-    return visibleBlogs.indexOf(blog.id) > -1
-  }
-
-  const setVisibility = (blog) => {
-    if (check(blog)) {
-      toggleVisibility(false, blog.id)
-    } else {
-      toggleVisibility(true, blog.id)
-    }
-
-  }
-
-  const text = (blog) => {
-    if (check(blog)) {
-      return 'hide'
-    }
-      else {
-        return 'view'
-      }
-  }
-
-
   const showWhenValidUser = (blog) => {
-    return { display: (blog.user.username === user.username) ? '' : 'none' }
-  }
+      return { display: (blog.user.username === user.username) ? '' : 'none' }
 
-  const showWhenValid = (blog) => {
-    if (check(blog)) {
-      return { display: '' }
-    } else {
-      return { display: 'none' }
-    }
 
   }
 
+  if (!blog) {
+    return (
+      <div>loading...</div>
+    )
+  } else {
   return (
-    <div>
-      {blog.map(blog =>
-        <div key={blog.id}>
-          <div style = {blogStyle}>
-          <div className="showOnDefault">
-            {blog.title} {blog.author} <button onClick={() => setVisibility(blog)}>{text(blog)}</button>
-          </div>
-          <div style = {showWhenValid(blog)} className="doNotShowOnDefault">
-            <p>{blog.url}</p>
-            <p>likes {blog.likes}<button onClick={() => {voteBlog(blog, user.token)}}>like</button></p>
-            <p>{blog.user.username}</p>
-            <div style = {showWhenValidUser(blog)} className="removebutton">
-              <button onClick={() => { deleteBlog(blog, user.token)} }>remove</button>
-            </div>
-          </div>
-        </div>
-        </div>
-      )}
-    </div>
+    <div style = {blogStyle}>
+      {blog.title} {blog.author}
+      <p>{blog.url}</p>
+      <p>likes {blog.likes}<button onClick={() => {voteBlog(blog, user.token)}}>like</button></p>
+      <p>{blog.user.username}</p>
+      <div style = {showWhenValidUser(blog)} className="removebutton">
+        <button onClick={() => { deleteBlog(blog, user.token)} }>remove</button>
+      </div>
+  </div>
   )
+}
 }
 
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    blog: state.blogs,
     visibleBlogs: state.visibility
   }
 }

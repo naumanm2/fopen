@@ -55,11 +55,10 @@ export const initialBlogs = () => {
 export const deleteBlog = (blog, token) => {
   return async dispatch => {
     await blogService.setToken(token)
-    const data = await blogService.deleteblog(blog.id)
-
+    await blogService.deleteblog(blog.id)
     dispatch({
       type: 'DELETE_BLOG',
-      data
+      blog
     })
   }
 }
@@ -71,11 +70,8 @@ const blogReducer = (state = [], action) => {
     case 'INITIAL_BLOGS':
       return action.blogs
     case 'DELETE_BLOG':
-      console.log(state)
-      console.log(action.data)
-      return state.filter(x => x.id !== action.data.id)
+      return state.filter(x => x.id !== action.blog.id)
     case 'VOTE_BLOG':
-    console.log(state)
       return state
       .map(x => x.id !== action.data.id ? x : action.data)
       .sort(sortblogs)

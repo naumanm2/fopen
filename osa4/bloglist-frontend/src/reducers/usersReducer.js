@@ -10,15 +10,6 @@ export const getUsers = () => {
   }
   }
 
-  export const setUserToShow = (user) => {
-    return async dispatch => {
-      dispatch({
-        type: 'SINGLE_USER',
-        user
-      })
-    }
-  }
-
 
 
   const usersReducer = (state = [], action) => {

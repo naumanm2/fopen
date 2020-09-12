@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 const User = ({user}) => {
   if (!user) return <div>wait...</div>
@@ -14,7 +13,5 @@ const User = ({user}) => {
     </div>
   )
 }
-
-
 
 export default User

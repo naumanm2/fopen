@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Users from './components/Users'
 import User from './components/User'
@@ -10,7 +11,12 @@ import './index.css'
 import Notif from './components/Notif'
 import Togglable from './components/Togglable'
 
-import Container from '@material-ui/core/Container'
+import {
+  Container,
+  Button,
+  Toolbar,
+  AppBar,
+} from '@material-ui/core'
 
 import { connect } from 'react-redux'
 
@@ -92,10 +98,20 @@ const App = (props) => {
   )
 
   const match = useRouteMatch("/users/:id")
+  const bmatch = useRouteMatch("/blogs/:id")
   const user = () => {
     const user = match ? match.params.id : null
     if (user) {
       return props.users.find(u => u.id === user)
+    }
+  }
+
+  const blog = () => {
+    const blog = bmatch ? bmatch.params.id : null
+    console.log(blog)
+    console.log(props.blogs)
+    if (blog) {
+      return props.blogs.find(u => u.id === blog)
     }
   }
 
@@ -116,9 +132,15 @@ const App = (props) => {
   return (
     <Container>
       <div>
+        <AppBar position="static">
+          <Toolbar>
+            <Button color="inherit" component={Link} to="/">blogs</Button>
+            <Button color="inherit" component={Link} to="/users">users</Button>
+            <Logout   />
+          </Toolbar>
+        </AppBar>
         <h2>blogs</h2>
         <Notif />
-        <Logout   />
         <Switch>
           <Route path="/users/:id">
             <User user={user()}/>
@@ -126,8 +148,11 @@ const App = (props) => {
           <Route path="/users">
             <Users />
           </Route>
+          <Route path="/blogs/:id">
+            <Blog blog={blog()}/>
+          </Route>
           <Route path="/">
-            <Blog />
+            <Blogs />
             {blogForm()}
           </Route>
         </Switch>
@@ -139,7 +164,8 @@ const App = (props) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    users: state.users
+    users: state.users,
+    blogs: state.blogs
   }
 
 }
