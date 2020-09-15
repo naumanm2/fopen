@@ -22,6 +22,22 @@ export const addBlog = (blog, user) => {
   }
 }
 
+export const postComment = (comment, blog, user) => {
+  return async dispatch => {
+    await blogService.setToken(user.token)
+    const content = await blogService.comment({ comment }, blog.id)
+    console.log(content)
+    const updatedBlog = {...blog, comments: blog.comments.concat(comment)}
+      dispatch({
+        type: 'COMMENT',
+        data: {
+          content: content,
+          data: updatedBlog
+        }
+      })
+  }
+}
+
 
 export const voteBlog = (blog, token) => {
   return async dispatch => {
@@ -75,7 +91,10 @@ const blogReducer = (state = [], action) => {
       return state
       .map(x => x.id !== action.data.id ? x : action.data)
       .sort(sortblogs)
-      default:
+    case 'COMMENT':
+      return state
+        .map(x => x.id !== action.data.id ? x : action.data)
+    default:
       return state
   }
 }

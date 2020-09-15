@@ -37,6 +37,8 @@ const App = (props) => {
   const [password, setPassword] = useState('')
   const blogRef = useRef()
 
+  const [comment, setComment] = useState('')
+
   const handleLogin = async (event) => {
    event.preventDefault()
    try {
@@ -99,6 +101,7 @@ const App = (props) => {
 
   const match = useRouteMatch("/users/:id")
   const bmatch = useRouteMatch("/blogs/:id")
+
   const user = () => {
     const user = match ? match.params.id : null
     if (user) {
@@ -108,8 +111,6 @@ const App = (props) => {
 
   const blog = () => {
     const blog = bmatch ? bmatch.params.id : null
-    console.log(blog)
-    console.log(props.blogs)
     if (blog) {
       return props.blogs.find(u => u.id === blog)
     }
@@ -149,7 +150,11 @@ const App = (props) => {
             <Users />
           </Route>
           <Route path="/blogs/:id">
-            <Blog blog={blog()}/>
+            <Blog
+              blog={blog()}
+              comment={comment}
+              handleChange={({target}) => setComment(target.value)}
+            />
           </Route>
           <Route path="/">
             <Blogs />
