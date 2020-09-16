@@ -11,7 +11,7 @@ blogRouter.get('/', async (request, response) => {
       name: 1
     })
 
-  response.json(result.map(x => x.toJSON()))
+  response.json(result)
 })
 
 

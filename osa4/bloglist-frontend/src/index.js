@@ -8,11 +8,26 @@ import {
 
 import store from './store'
 
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import { dark } from './themes'
+
+export const GlobalStyles = createGlobalStyle`
+  body, #root {
+    background: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+    flex-direction: row;
+    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+`;
+
 
 ReactDOM.render(
   <Router>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ThemeProvider theme={dark}>
+      <GlobalStyles />
+        <Provider store={store}>
+          <App />
+        </Provider>
+    </ThemeProvider>
   </Router>, document.getElementById('root')
 )

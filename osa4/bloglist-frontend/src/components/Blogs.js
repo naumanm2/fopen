@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { voteBlog, deleteBlog } from '../reducers/blogReducer'
 
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const Blogs = ({
   blog,
@@ -12,20 +12,19 @@ const Blogs = ({
   visibleBlogs
   }) => {
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
   return (
     <div>
       {blog.map(blog =>
         <div key={blog.id}>
-          <div style = {blogStyle}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+          <div>
+            <NavLink
+              to={`/blogs/${blog.id}`}
+              style={{
+                font: "Roboto",
+                textDecoration: "none",
+                color: "white"
+              }}>{blog.title} {blog.author}
+            </NavLink>
         </div>
         </div>
       )}

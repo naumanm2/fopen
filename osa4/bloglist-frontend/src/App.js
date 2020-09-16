@@ -18,6 +18,8 @@ import {
   AppBar,
 } from '@material-ui/core'
 
+
+
 import { connect } from 'react-redux'
 
 import {
@@ -32,6 +34,8 @@ import { setUserToShow } from './reducers/userReducer'
 
 
 const App = (props) => {
+
+
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -120,6 +124,7 @@ const App = (props) => {
 
   if (props.user === null) {
     return (
+
       <Container>
         <div>
           <h2>Log in to application</h2>

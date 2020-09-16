@@ -3,6 +3,13 @@ import { connect } from 'react-redux'
 import { voteBlog, deleteBlog, postComment } from '../reducers/blogReducer'
 import { toggleVisibility } from '../reducers/visibilityReducer'
 
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
 const Blog = ({
   blog,
   user,
@@ -15,13 +22,26 @@ const Blog = ({
   postComment
 }) => {
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
+  const useStyles = makeStyles({
+    root: {
+      minWidth: 275,
+    },
+    bullet: {
+      display: 'inline-block',
+      margin: '0 2px',
+      transform: 'scale(0.8)',
+    },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+  });
+
+
+    const classes = useStyles()
+
 
   const showWhenValidUser = (blog) => {
       return { display: (blog.user.username === user.username) ? '' : 'none' }
@@ -36,17 +56,31 @@ const Blog = ({
   return (
     <div>
       <div>
-        <div style = {blogStyle}>
-          {blog.title} {blog.author}
-          <p>{blog.url}</p>
-          <p>likes {blog.likes}<button onClick={() => {voteBlog(blog, user.token)}}>like</button></p>
-          <p>{blog.user.username}</p>
+        <Card className={classes.root} variant="outlined">
+          <CardContent>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              {blog.title} {blog.author}
+            </Typography>
+
+            <Typography className={classes.pos} color="textSecondary">
+              {blog.url}
+            </Typography>
+            <Typography>
+
+            likes {blog.likes}<Button size="small" onClick={() => {voteBlog(blog, user.token)}}>like</Button>
+            </Typography>
+            <p>{blog.user.username}</p>
+          </CardContent>
+          <CardActions>
           <div style = {showWhenValidUser(blog)} className="removebutton">
-            <button onClick={() => { deleteBlog(blog, user.token)} }>remove</button>
+            <Button size="small" onClick={() => { deleteBlog(blog, user.token)} }>remove</Button>
           </div>
+          </CardActions>
+        </Card>
       </div>
-    </div>
+
     <div id="comments">
+      <h2>comments</h2>
       <form onSubmit = {() => postComment(comment, blog, user)}>
         <input type="text" value={comment} onChange={handleChange}></input>
         <button>comment</button>

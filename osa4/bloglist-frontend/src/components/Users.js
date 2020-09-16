@@ -24,7 +24,7 @@ const Users = ({users, setUserToShow}) => {
             {users.map(user => (
               <TableRow key={user.id}>
                 <TableCell>
-                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                  <Link to={`/users/${user.id}`}>{user.username}</Link>
                 </TableCell>
                 <TableCell>
                   {user.blogs.length}
