@@ -4,8 +4,17 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 
+
+import { useQuery, useMutation } from '@apollo/client'
+import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK } from './queries'
+
 const App = () => {
   const [page, setPage] = useState('authors')
+
+  const books = useQuery(ALL_BOOKS)
+  const addBook = useMutation(ADD_BOOK)
+  const authors = useQuery(ALL_AUTHORS)
+
 
   return (
     <div>
@@ -17,14 +26,17 @@ const App = () => {
 
       <Authors
         show={page === 'authors'}
+        authors={authors}
       />
 
       <Books
         show={page === 'books'}
+        books={books}
       />
 
       <NewBook
         show={page === 'add'}
+        addBook={addBook}
       />
 
     </div>
