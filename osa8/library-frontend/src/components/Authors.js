@@ -31,8 +31,8 @@ const Authors = (props) => {
   if (props.authors.loading) {
     return <div>loading...</div>
   }
-  const authors = props.authors.data.allAuthors
 
+  const authors = props.authors.data.allAuthors
   return (<div>
     <h2>authors</h2>
     <table>
