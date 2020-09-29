@@ -18,6 +18,17 @@ export const ALL_BOOKS = gql`
         name
       }
       published
+      genres
+    }
+  }
+`
+
+export const USER = gql`
+  query {
+    me {
+      username
+      favoriteGenre
+      id
     }
   }
 `
@@ -51,3 +62,24 @@ export const SET_YEAR = gql`
   }
 
 `
+
+export const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(
+      username: $username,
+      password: $password
+    ) {
+      value
+    }
+  }
+`
+export const CREATE_USER = gql`
+mutation createUser($username: String!, $favoriteGenre: String!) {
+  createUser(
+    username: $username,
+    favoriteGenre: $favoriteGenre
+  ) {
+    username,
+    favoriteGenre
+  }
+}`

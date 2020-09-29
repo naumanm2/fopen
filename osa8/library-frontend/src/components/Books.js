@@ -4,22 +4,35 @@ const Books = (props) => {
   if (!props.show) {
     return null
   }
+  let msg = ''
 
-  const books = props.books.data.allBooks
+  let books = props.books.data.allBooks
+  if (props.filter) {
+    console.log(books)
+    msg = 'books specifically for you'
+    books = books.filter(x => x.genres.indexOf(props.filter)>-1)
+  }
+
 
   return (
     <div>
       <h2>books</h2>
+      <h3>{msg}</h3>
 
       <table>
         <tbody>
           <tr>
-            <th></th>
+            <th>
+              title
+            </th>
             <th>
               author
             </th>
             <th>
               published
+            </th>
+            <th>
+              genres
             </th>
           </tr>
           {books.map(a =>
@@ -27,6 +40,7 @@ const Books = (props) => {
               <td>{a.title}</td>
               <td>{a.author.name}</td>
               <td>{a.published}</td>
+              <td>{a.genres}</td>
             </tr>
           )}
         </tbody>

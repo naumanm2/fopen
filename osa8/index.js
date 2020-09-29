@@ -1,8 +1,9 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
+const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
@@ -35,12 +36,12 @@ const typeDefs = gql`
     id: ID!
   }
   type User {
-  username: String!
-  favoriteGenre: String!
-  id: ID!
+    username: String!
+    favoriteGenre: String!
+    id: ID!
   }
   type Token {
-  value: String!
+    value: String!
   }
   type Query {
     bookCount: Int!
@@ -130,7 +131,7 @@ const resolvers = {
     createUser: async (root, args, context) => {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
       return user.save()
-        .catch(e => {
+        .catch(error => {
           throw new UserInputError(error.message, {
               invalidArgs: args,
             })
@@ -164,7 +165,7 @@ const server = new ApolloServer({
         auth.substring(7), JWT_SECRET
       )
       const currentUser = await User
-        .findById(decodedToken.id).populate('friends')
+        .findById(decodedToken.id)
       return { currentUser }
     }
   }
