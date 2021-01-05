@@ -1,11 +1,20 @@
-import React, {useState} from 'react'
-import { useMutation } from '@apollo/client'
+import React, {useState, useEffect} from 'react'
+import { useMutation, useQuery } from '@apollo/client'
 
 import { SET_YEAR, ALL_AUTHORS } from '../queries'
 
 const Authors = (props) => {
   const [year, setYear] = useState('')
   const [name, setName] = useState('')
+  const [authors, setAuthors] = useState([])
+  const result = useQuery(ALL_AUTHORS)
+
+  useEffect(() => {
+    if (result.data) {
+      setAuthors(result.data.allAuthors)
+    }
+  }, [result])
+
   const editAuthor = useMutation(SET_YEAR, {
     refetchQueries: [{ query: ALL_AUTHORS}]
   })
@@ -28,11 +37,10 @@ const Authors = (props) => {
   }
 
 
-  if (props.authors.loading) {
+  if (authors.loading) {
     return <div>loading...</div>
   }
 
-  const authors = props.authors.data.allAuthors
   return (<div>
     <h2>authors</h2>
     <table>
