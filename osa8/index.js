@@ -119,7 +119,6 @@ const resolvers = {
       return newBook
   },
   editAuthor: async (root, args, context) => {
-
     const user = context.currentUser
 
     if (!user) {

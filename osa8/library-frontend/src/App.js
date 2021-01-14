@@ -15,7 +15,7 @@ const App = () => {
 
   const client = useApolloClient();
 
-  const authors = useQuery(ALL_AUTHORS);
+ 
 
   const logout = () => {
     setToken(null);
@@ -47,7 +47,7 @@ const App = () => {
         )}
         {token && <button onClick={() => logout()}>logout</button>}
       </div>
-      <Authors show={page === "authors"} authors={authors} />
+      <Authors show={page === "authors"} />
       <Books show={page === "books"} />
       <Recommended show={page === "recommended"} />
       <NewBook show={page === "add"} />
