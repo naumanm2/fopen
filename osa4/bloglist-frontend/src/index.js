@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import { Provider } from 'react-redux'
 import {
-  BrowserRouter as Router
+  HashRouter
 }  from 'react-router-dom'
 
 import store from './store'
@@ -22,12 +22,12 @@ export const GlobalStyles = createGlobalStyle`
 
 
 ReactDOM.render(
-  <Router>
+  <HashRouter>
     <ThemeProvider theme={dark}>
       <GlobalStyles />
         <Provider store={store}>
           <App />
         </Provider>
     </ThemeProvider>
-  </Router>, document.getElementById('root')
+  </HashRouter>, document.getElementById('root')
 )
