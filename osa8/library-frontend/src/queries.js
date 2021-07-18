@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const ALL_AUTHORS = gql`
   query {
@@ -8,7 +8,7 @@ export const ALL_AUTHORS = gql`
       bookCount
     }
   }
-`
+`;
 
 export const ALL_BOOKS = gql`
   query ALL_BOOKS($genre: String) {
@@ -21,7 +21,7 @@ export const ALL_BOOKS = gql`
       genres
     }
   }
-`
+`;
 
 export const USER = gql`
   query {
@@ -31,14 +31,19 @@ export const USER = gql`
       id
     }
   }
-`
+`;
 
 export const ADD_BOOK = gql`
-  mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [ String! ]) {
+  mutation addBook(
+    $title: String!
+    $author: String!
+    $published: Int!
+    $genres: [String!]
+  ) {
     addBook(
-      title: $title,
-      author: $author,
-      published: $published,
+      title: $title
+      author: $author
+      published: $published
       genres: $genres
     ) {
       title
@@ -48,38 +53,42 @@ export const ADD_BOOK = gql`
       published
     }
   }
-`
+`;
 
 export const SET_YEAR = gql`
   mutation editAuthor($name: String!, $birthyear: Int!) {
-    editAuthor(
-      name: $name,
-      setBornTo: $birthyear
-    ) {
+    editAuthor(name: $name, setBornTo: $birthyear) {
       name
       born
     }
   }
-
-`
+`;
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
-    login(
-      username: $username,
-      password: $password
-    ) {
+    login(username: $username, password: $password) {
       value
     }
   }
-`
+`;
 export const CREATE_USER = gql`
-mutation createUser($username: String!, $favoriteGenre: String!) {
-  createUser(
-    username: $username,
-    favoriteGenre: $favoriteGenre
-  ) {
-    username,
-    favoriteGenre
+  mutation createUser($username: String!, $favoriteGenre: String!) {
+    createUser(username: $username, favoriteGenre: $favoriteGenre) {
+      username
+      favoriteGenre
+    }
   }
-}`
+`;
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      author {
+        name
+      }
+      published
+      genres
+    }
+  }
+`;

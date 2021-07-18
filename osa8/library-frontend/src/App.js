@@ -3,10 +3,10 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
-import Recommended from './components/Recommended'
+import Recommended from "./components/Recommended";
 
-import { useQuery, useApolloClient, useLazyQuery } from "@apollo/client";
-import { ALL_AUTHORS, ALL_BOOKS, USER } from "./queries";
+import { useQuery, useApolloClient, useSubscription } from "@apollo/client";
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, USER } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -15,37 +15,31 @@ const App = () => {
 
   const client = useApolloClient();
 
- 
-
   const logout = () => {
     setToken(null);
     localStorage.clear();
     client.resetStore();
   };
 
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subsciptionData }) => {
+      console.log(subsciptionData);
+    },
+  });
+
   return (
     <div>
       <div>
         <button onClick={() => setPage("authors")}>authors</button>
-        <button
-          onClick={() => {
-            setPage("books");
-          }}
-        >
-          books
-        </button>
+        <button onClick={() => setPage("books")}>books</button>
         {!token && <button onClick={() => setPage("login")}>login</button>}
-        {token && <button onClick={() => setPage("add")}>add</button>}
         {token && (
-          <button
-            onClick={() => {
-              setPage("recommended");
-            }}
-          >
-            recommended
-          </button>
+          <div>
+            <button onClick={() => setPage("add")}>add</button>
+            <button onClick={() => setPage("recommended")}>recommended</button>
+            <button onClick={() => logout()}>logout</button>
+          </div>
         )}
-        {token && <button onClick={() => logout()}>logout</button>}
       </div>
       <Authors show={page === "authors"} />
       <Books show={page === "books"} />

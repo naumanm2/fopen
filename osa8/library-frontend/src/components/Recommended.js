@@ -15,8 +15,6 @@ const Recommended = ({ show }) => {
     }
   }, [getUser, show]);
 
-  console.log(fBooks);
-
   useEffect(() => {
     if (user.data) {
       setFilter(user.data.me.favoriteGenre);
