@@ -5,11 +5,19 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    minlength: 4
+    minlength: 4,
+    alias: "author",
   },
   born: {
     type: Number,
   },
+})
+
+schema.virtual('bookCount', {
+  ref: 'Book',
+  localField: "_id",
+  foreignField: "author",
+  count: true,
 })
 
 module.exports = mongoose.model('Author', schema)

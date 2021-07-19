@@ -81,7 +81,11 @@ const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    allAuthors: async () => await Author.find({}),
+    allAuthors: () => {
+      console.log('author.find')
+      return Author.find({}).populate("bookCount");
+    },
+    // return Author.find({})
     allBooks: async (root, args) => {
       let books = await Book.find({}).populate("author", { name: 1 });
       if (args.genre) {
@@ -91,12 +95,21 @@ const resolvers = {
     },
     me: (root, args, context) => context.currentUser,
   },
-  Author: {
-    bookCount: async (parent) => {
-      const books = await Book.find({}).populate("author", { name: 1 });
-      return books.filter((x) => x.author.name === parent.name).length;
-    },
-  },
+
+  // Author: {
+  //   bookCount: async (root) => {
+  //     console.log("book.find");
+  //     // const books = await Book.find({}).populate("author", { name: 1 });
+  //     // return books.filter((x) => x.author.name === parent.name).length;
+  //     return root.books
+  //   },
+  // },
+  // Book: {
+  //   author: parent => {
+  //     // console.log(parent)
+  //     return Author.findById(parent.author)
+  //   }
+  // },
   Mutation: {
     addBook: async (root, args, context) => {
       const user = context.currentUser;
