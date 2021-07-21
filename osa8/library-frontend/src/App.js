@@ -9,6 +9,20 @@ import { useQuery, useMutation, useApolloClient, useSubscription } from "@apollo
 import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, USER, ADD_BOOK } from "./queries";
 
 const App = () => {
+
+  const list = [{m:"Hei"},{m:"Hey"},{m:"Hi"}]
+
+  console.log(1) 
+  useEffect(() => {
+    console.log(2)	
+    setTimeout(()=>{
+      console.log(3)
+    }, 1000)
+    console.log(4) 
+  })
+  console.log(5) 
+  return (<div>hello</div>)
+  
   const [page, setPage] = useState("authors");
   const [token, setToken] = useState(null);
   const [error, setError] = useState("");
