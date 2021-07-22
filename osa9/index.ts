@@ -1,13 +1,12 @@
-type Operation = 'multiply' | 'add' | 'divide';
+import express from "express";
+const app = express();
 
-const calculator = (a: number, b: number, op: Operation): number => {
+app.get("/hello", (_req, res) => {
+  res.send("Hello Full Stack");
+});
 
-  if (op === 'multiply') {
-    return a * b;
-  } else if (op === 'add') {
-    return a + b;
-  } else if (op === 'divide') {
-    if (b === 0) return 'this cannot be done';
-    return a / b;
-  }
-}
+const PORT = 3003;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
