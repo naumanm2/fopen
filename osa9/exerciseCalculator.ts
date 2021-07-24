@@ -8,7 +8,7 @@ interface ExerciseData {
   average: number;
 }
 
-const exerciseCalculator = (
+export const exerciseCalculator = (
   data: Array<number>,
   target: number
 ): ExerciseData => {
@@ -46,14 +46,14 @@ const exerciseCalculator = (
   return result;
 };
 
-let target= 0;
-let data: Array<number> = [];
-for (let i = 2; i < process.argv.length; i++) {
-  if (isNaN(Number(process.argv[i]))) throw new Error("incorrect values");
-  if (i == 2) {
-    target = Number(process.argv[i]);
-  } else {
-    data = data.concat(Number(process.argv[i]));
-  }
-}
-console.log(exerciseCalculator(data, target));
+// let target= 0;
+// let data: Array<number> = [];
+// for (let i = 2; i < process.argv.length; i++) {
+//   if (isNaN(Number(process.argv[i]))) throw new Error("incorrect values");
+//   if (i == 2) {
+//     target = Number(process.argv[i]);
+//   } else {
+//     data = data.concat(Number(process.argv[i]));
+//   }
+// }
+// console.log(exerciseCalculator(data, target));
