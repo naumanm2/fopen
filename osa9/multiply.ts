@@ -1,14 +1,15 @@
-type Operation = 'multiply' | 'add' | 'divide';
+type Operation = "multiply" | "add" | "divide";
 
-type Result = number | string
+type Result = number | string;
 
 const calculator = (a: number, b: number, op: Operation): Result => {
-
-  if (op === 'multiply') {
+  if (op === "multiply") {
     return a * b;
-  } else if (op === 'add') {
+  } else if (op === "add") {
     return a + b;
-  } else if (op === 'divide') {
+  } else if (op === "divide") {
     return a / b;
-  } else return 'wrong input'
-}
+  } else return "wrong input";
+};
+
+console.log(calculator(3, 4, "add"));

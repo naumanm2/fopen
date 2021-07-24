@@ -13,7 +13,7 @@ const exerciseCalculator = (
   target: number
 ): ExerciseData => {
   if (data.length < 1) throw new Error("not enough data");
-  const targetHours: number = 20;
+  const targetHours = 20;
   const periodLength: number = data.length;
   const trainingDays: number = data.filter((x) => x > 0).length;
   const sum: number = data.reduce((a, b) => a + b, 0);
@@ -46,9 +46,9 @@ const exerciseCalculator = (
   return result;
 };
 
-let target: number = 0;
+let target= 0;
 let data: Array<number> = [];
-for (var i = 2; i < process.argv.length; i++) {
+for (let i = 2; i < process.argv.length; i++) {
   if (isNaN(Number(process.argv[i]))) throw new Error("incorrect values");
   if (i == 2) {
     target = Number(process.argv[i]);
