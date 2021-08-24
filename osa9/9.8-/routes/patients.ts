@@ -2,6 +2,8 @@ import express from "express";
 
 import patientService from "../services/patientService";
 
+import toNewPatientEntry from "../utils"
+
 const router = express.Router();
 
 // type Fields = {
@@ -20,16 +22,14 @@ router.get("/", (_req, res) => {
 
 router.post("/", (req, res) => {
   console.log("posting patient");
-  const { name, dateOfBirth, ssn, gender, occupation } = req.body;
+  try {
+    const newPatientEntry = toNewPatientEntry(req.body);
+    const newPatient = patientService.addPatient(newPatientEntry);
+    res.json(newPatient);
+  } catch (e) {
+      res.status(400).send(e.message);
+  }
 
-  const newPatient = patientService.addPatient({
-    name,
-    dateOfBirth,
-    ssn,
-    gender,
-    occupation,
-  });
-  res.json(newPatient);
 });
 
 export default router;
